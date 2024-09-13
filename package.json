@@ -1,6 +1,5 @@
 {
-  "name": "sub-conversion",
-  "version": "0.1.0",
+  "name": "clash-conversion",
   "private": true,
   "scripts": {
     "dev": "next dev",
