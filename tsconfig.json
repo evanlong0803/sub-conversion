@@ -25,12 +25,6 @@
       "@/*": [
         "./*"
       ],
-      "@tailus-ui/*": [
-        "./components/tailus-ui/*"
-      ],
-      "@lib/*": [
-        "./lib/*"
-      ],
     }
   },
   "include": [

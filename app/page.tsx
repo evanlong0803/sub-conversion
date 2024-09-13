@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import Button from '@tailus-ui/button'
-import Input from '@tailus-ui/input'
+import { Github, Clipboard, ExternalLink, ArrowRight } from 'lucide-react'
+import Link from 'next/link'
 
 export default function Home() {
   const [inputUrl, setInputUrl] = useState('')
@@ -17,9 +17,9 @@ export default function Home() {
       const response = await fetch('/api/convert', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ url: inputUrl }),
+        body: JSON.stringify({ url: inputUrl })
       })
       const data = await response.json()
       if (response.ok) {
@@ -35,53 +35,81 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center px-4 py-12">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="bg-blue-600 text-white py-4 px-6">
-          <h1 className="text-2xl font-bold">Clash 订阅转换</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-zinc-900 to-black text-white p-4">
+      <div className="w-full max-w-md space-y-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold tracking-tight mb-2">Clash 订阅转换</h1>
+          <p className="text-zinc-400">快速转换您的订阅链接</p>
         </div>
-        <div className="p-6 space-y-6">
+
+        <div className="space-y-6">
           <div className="space-y-2">
-            <label htmlFor="input-url" className="block text-sm font-medium text-gray-700">
-              订阅链接
+            <label htmlFor="input-url" className="block text-sm font-medium text-zinc-300">
+              输入订阅链接
             </label>
-            <Input
-              id="input-url"
-              type="text"
-              placeholder="请输入您的订阅链接"
-              value={inputUrl}
-              onChange={(e) => setInputUrl(e.target.value)}
-              className="w-full"
-            />
+            <div className="relative group">
+              <input
+                id="input-url"
+                type="url"
+                placeholder="https://example.com/subscribe"
+                value={inputUrl}
+                onChange={(e) => setInputUrl(e.target.value)}
+                className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-white/25 transition duration-300 ease-in-out"
+              />
+              <ExternalLink className="absolute right-3 top-1/2 transform -translate-y-1/2 text-zinc-500 group-hover:text-white transition duration-300" size={18} />
+            </div>
           </div>
-          <Button.Root 
-            onClick={handleConvert} 
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white transition duration-150 ease-in-out" 
+
+          <button
+            onClick={handleConvert}
+            className="w-full bg-white text-black font-semibold py-3 px-4 rounded-lg transition duration-300 ease-in-out hover:bg-zinc-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             disabled={isLoading}
           >
-            <Button.Label>{isLoading ? '正在转换...' : '开始转换'}</Button.Label>
-          </Button.Root>
-          {error && <p className="text-red-500 text-center text-sm">{error}</p>}
+            {isLoading ? '正在转换...' : (
+              <>
+                开始转换
+                <ArrowRight className="ml-2" size={18} />
+              </>
+            )}
+          </button>
+
+          {error && <p className="text-red-400 text-center text-sm">{error}</p>}
+
           {outputUrl && (
-            <div className="space-y-4">
-              <h2 className="text-lg font-semibold text-center text-green-600">转换成功！</h2>
-              <p className="text-sm text-gray-600 text-center">
+            <div className="space-y-4 bg-zinc-800/50 p-6 rounded-lg border border-zinc-700">
+              <h2 className="text-lg font-semibold text-center text-green-400">
+                转换成功！
+              </h2>
+              <p className="text-sm text-zinc-400 text-center">
                 请复制以下链接并在 Clash 中导入为 URL 配置
               </p>
-              <div className="bg-gray-100 p-3 rounded-md break-all">
-                <code className="text-xs">{outputUrl}</code>
+              <div className="bg-black/50 p-4 rounded-md break-all relative group">
+                <code className="text-sm text-zinc-300">{outputUrl}</code>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(outputUrl)
+                    alert('链接已复制到剪贴板！')
+                  }}
+                  className="absolute top-2 right-2 text-zinc-500 hover:text-white opacity-0 group-hover:opacity-100 transition-all duration-300"
+                  title="复制链接"
+                >
+                  <Clipboard size={18} />
+                </button>
               </div>
-              <Button.Root 
-                onClick={() => {
-                  navigator.clipboard.writeText(outputUrl);
-                  alert('链接已复制到剪贴板！');
-                }} 
-                className="w-full bg-green-600 hover:bg-green-700 text-white transition duration-150 ease-in-out"
-              >
-                <Button.Label>复制链接</Button.Label>
-              </Button.Root>
             </div>
           )}
+        </div>
+
+        <div className="text-center">
+          <Link
+            href="https://github.com/evanlong0803/sub-conversion"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-zinc-500 hover:text-white transition duration-300 inline-flex items-center"
+          >
+            <Github size={18} className="mr-2" />
+            GitHub 仓库
+          </Link>
         </div>
       </div>
     </div>
