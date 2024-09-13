@@ -2,7 +2,7 @@
 
 This is a subscription link converter project implemented using [Next.js](https://nextjs.org) and App Router. It can convert subscription links into a format recognizable by Clash.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fevanlong0803%2Fsub-conversion&env=SUBCONVERTER_URL&envDescription=Enter%20your%20conversion%20link%20(optional)&envOptional=SUBCONVERTER_URL)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fevanlong0803%2Fsub-conversion&project-name=sub-conversion&env=SUBCONVERTER_URL&envDescription=Enter%20your%20conversion%20link%20(optional)&envOptional=SUBCONVERTER_URL)
 
 ## Getting Started
 
