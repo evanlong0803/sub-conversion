@@ -13,6 +13,23 @@ export default function Home() {
   const handleConvert = async () => {
     setIsLoading(true)
     setError('')
+
+    // Add input validation
+    if (!inputUrl.trim()) {
+      setError('请输入订阅链接')
+      setIsLoading(false)
+      return
+    }
+
+    // Add URL validation
+    try {
+      new URL(inputUrl)
+    } catch {
+      setError('请输入有效的 URL')
+      setIsLoading(false)
+      return
+    }
+
     try {
       const response = await fetch('/api/convert', {
         method: 'POST',
