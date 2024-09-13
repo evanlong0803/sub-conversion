@@ -1,0 +1,8 @@
+{
+  "env": {
+    "SUBCONVERTER_URL": {
+      "description": "Custom subconverter URL (optional)",
+      "default": "https://api.v1.mk"
+    }
+  }
+}

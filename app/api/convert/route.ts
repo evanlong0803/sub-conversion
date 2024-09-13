@@ -8,7 +8,7 @@ export async function POST(request: Request) {
   const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http'
 
   try {
-    // 创建后端转换服务的 URL
+    // 使用环境变量中的 SUBCONVERTER_URL，如果未设置则使用默认值
     const backendUrl = process.env.SUBCONVERTER_URL || 'https://api.v1.mk'
     const target = 'clash'
     const config = 'https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online.ini'
