@@ -1,4 +1,8 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Subscription Link Converter
+
+This is a subscription link converter project implemented using [Next.js](https://nextjs.org) and App Router. It can convert subscription links into a format recognizable by Clash.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/clone?repository-url=https%3A%2F%2Fgithub.com%2Fevanlong0803%2Fsub-conversion&env=SUBCONVERTER_URL&envDescription=Enter%20your%20subconverter%20URL)
 
 ## Getting Started
 
@@ -6,11 +10,11 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
+# 或
 yarn dev
-# or
+# 或
 pnpm dev
-# or
+# 或
 bun dev
 ```
 
