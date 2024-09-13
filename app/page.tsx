@@ -1,101 +1,89 @@
-import Image from "next/image";
+'use client'
+
+import { useState } from 'react'
+import Button from '@tailus-ui/button'
+import Input from '@tailus-ui/input'
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [inputUrl, setInputUrl] = useState('')
+  const [outputUrl, setOutputUrl] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleConvert = async () => {
+    setIsLoading(true)
+    setError('')
+    try {
+      const response = await fetch('/api/convert', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url: inputUrl }),
+      })
+      const data = await response.json()
+      if (response.ok) {
+        setOutputUrl(data.clashUrl)
+      } else {
+        setError(data.error || '转换过程中发生错误')
+      }
+    } catch (err) {
+      setError('无法连接到转换服务')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center px-4 py-12">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-blue-600 text-white py-4 px-6">
+          <h1 className="text-2xl font-bold">Clash 订阅转换</h1>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="p-6 space-y-6">
+          <div className="space-y-2">
+            <label htmlFor="input-url" className="block text-sm font-medium text-gray-700">
+              订阅链接
+            </label>
+            <Input
+              id="input-url"
+              type="text"
+              placeholder="请输入您的订阅链接"
+              value={inputUrl}
+              onChange={(e) => setInputUrl(e.target.value)}
+              className="w-full"
+            />
+          </div>
+          <Button.Root 
+            onClick={handleConvert} 
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white transition duration-150 ease-in-out" 
+            disabled={isLoading}
+          >
+            <Button.Label>{isLoading ? '正在转换...' : '开始转换'}</Button.Label>
+          </Button.Root>
+          {error && <p className="text-red-500 text-center text-sm">{error}</p>}
+          {outputUrl && (
+            <div className="space-y-4">
+              <h2 className="text-lg font-semibold text-center text-green-600">转换成功！</h2>
+              <p className="text-sm text-gray-600 text-center">
+                请复制以下链接并在 Clash 中导入为 URL 配置
+              </p>
+              <div className="bg-gray-100 p-3 rounded-md break-all">
+                <code className="text-xs">{outputUrl}</code>
+              </div>
+              <Button.Root 
+                onClick={() => {
+                  navigator.clipboard.writeText(outputUrl);
+                  alert('链接已复制到剪贴板！');
+                }} 
+                className="w-full bg-green-600 hover:bg-green-700 text-white transition duration-150 ease-in-out"
+              >
+                <Button.Label>复制链接</Button.Label>
+              </Button.Root>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
-  );
+  )
 }
